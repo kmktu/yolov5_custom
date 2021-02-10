@@ -3,7 +3,8 @@
 ## Cuda 설치
 
 - 사용하는 그래픽카드의 그래픽드라이버 최신 버전으로 업데이트
-- https://en.wikipedia.org/wiki/CUDA 참조하여 GPU의 Compute Capability에 따라 권장되는 Version의 Cuda 설치 (Cuda 설치 주소 : https://developer.nvidia.com/cuda-downloads)
+- https://en.wikipedia.org/wiki/CUDA 참조하여 GPU의 Compute Capability에 따라 권장되는 Version의 Cuda 설치 
+- Cuda 설치 주소 : https://developer.nvidia.com/cuda-downloads
 
 ## 소스코드 다운로드
 
@@ -59,14 +60,14 @@
   - Json 라벨링 파일을 Yolov5 포맷의 txt 파일로 전처리하는 코드는 preprocessing_data 폴더에 존재
   - **폴더 구성 예시**
   ```
-  Yolov5(d) ┌ images(d) ┌ test(d)
-            │           ├ train(d)
-            │           └ val(d)
-            └ labels(d) ┌ test.py(d)
-                        ├ pretrain_weights.pt(d)
-                        └ dataset.yaml(d)
+  yolov5_data(d) ┌ images(d) ┌ test(d)
+                 │           ├ train(d)
+                 │           └ val(d)
+                 └ labels(d) ┌ test.py(d)
+                             ├ pretrain_weights.pt(d)
+                             └ dataset.yaml(d)
   ```
-- Yolov5 폴더에 Pretrain된 모델 Weight 파일 준비 (https://drive.google.com/file/d/1x9GY9VzzxrQQz_t1nu-YWjJGcfJrHxAO/view?usp=sharing)
+- Yolov5 폴더에 Pretrain된 모델 Weight 파일 준비 **(https://drive.google.com/file/d/1x9GY9VzzxrQQz_t1nu-YWjJGcfJrHxAO/view?usp=sharing)**
 - 하이퍼파라미터 설정
   - Yolov5에서 제공하는 hyp.scratch.yaml을 사용해도 되며, 아래 테스트에 사용된 하이퍼파라미터를 사용할 수 있음
   - 아래 하이퍼파라미터는 Yolov5에서 제공하는 evolve 기능을 활용하여 300회 테스트를 거쳐 작성된 하이퍼파라미터임
@@ -115,7 +116,7 @@ $ python3 test.py --data dataset.yaml --weights pretrain_weights.pt --task test
 ```
 - 학습 코드 예시 
 ```bash
-$ python3 train.py --data dataset.yaml --weights pretrain_weights.pt --hyp hyp.evolved.yaml --epochs 300 --batch 32
+$ python3 train.py --data dataset.yaml --weights pretrain_weights.pt --hyp hyp_evolved.yaml --epochs 300 --batch 32
 ```
 
 
