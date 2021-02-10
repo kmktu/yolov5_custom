@@ -37,7 +37,7 @@
 
 - 다운 받은 Yolov5 폴더 내에 dataset.yaml 파일의 내용을 준비된 데이터셋 파일 위치로 작성
   - 학습용 데이터의 이미지가 위치한 폴더들(Train, Validation, Test set)의 경로를 입력하고, 총 클래스의 수와 클래스명 리스트 작성
-  - ```python
+  ```python
   train: ../yolov5_data/images/train/
   val: ../yolov5_data/images/val/
   test: ../yolov5_data/images/test/
