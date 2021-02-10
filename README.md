@@ -44,7 +44,16 @@
 
   nc: 83
 
-  names: ["flatness_A", "flatness_B", "flatness_C", "flatness_D", "flatness_E", "walkway_paved", "walkway_block", "paved_state_broken", "paved_state_normal", "block_state_broken", "block_state_normal", "block_kind_bad", "block_kind_good", "outcurb_rectangle", "outcurb_slide", "outcurb_rectangle_broken", "restspace", "sidegap_in", "sidegap_out", "sewer_cross", "sewer_line", "brailleblock_dot", "brailleblock_line", "brailleblock_dot_broken", "brailleblock_line_broken", "continuity_tree", "continuity_manhole", "ramp_yes", "ramp_no", "bicycleroad_broken", "bicycleroad_normal", "planecrosswalk_broken", "planecrosswalk_normal", "steepramp", "bump_slow", "weed", "floor_normal", "flowerbed", "parkspace", "tierbump", "stone", "enterrail", "stair_normal", "stair_broken", "wall", "window_sliding", "window_casement", "pillar", "lift", "door_normal", "lift_door", "resting_place_roof", "reception_desk", "protect_wall_protective", "protect_wall_guardrail", "protect_wall_kickplate", "handle_vertical", "handle_lever", "handle_circular", "lift_button_normal", "lift_button_openarea", "lift_button_layer", "lift_button_emergency", "direction_sign_left", "direction_sign_right", "direction_sign_straight", "direction_sign_exit", "sign_disabled_toilet", "sign_disabled_parking", "sign_disabled_elevator", "sign_disabled_callbell", "sign_disabled_icon", "braille_sign", "chair_multi", "chair_one", "chair_circular", "chair_back", "chair_handle", "number_ticker_machine", "beverage_vending_machine", "beverage_desk", "trash_can", "mailbox"]
+  names: ["flatness_A", "flatness_B", "flatness_C", "flatness_D", "flatness_E", "walkway_paved", "walkway_block", "paved_state_broken", "paved_state_normal",
+  "block_state_broken", "block_state_normal", "block_kind_bad", "block_kind_good", "outcurb_rectangle", "outcurb_slide", "outcurb_rectangle_broken", "restspace", "sidegap_in", 
+  "sidegap_out", "sewer_cross", "sewer_line", "brailleblock_dot", "brailleblock_line", "brailleblock_dot_broken", "brailleblock_line_broken", "continuity_tree", 
+  "continuity_manhole", "ramp_yes", "ramp_no", "bicycleroad_broken", "bicycleroad_normal", "planecrosswalk_broken", "planecrosswalk_normal", "steepramp", "bump_slow", "weed", 
+  "floor_normal", "flowerbed", "parkspace", "tierbump", "stone", "enterrail", "stair_normal", "stair_broken", "wall", "window_sliding", "window_casement", "pillar", "lift", 
+  "door_normal", "lift_door", "resting_place_roof", "reception_desk", "protect_wall_protective", "protect_wall_guardrail", "protect_wall_kickplate", "handle_vertical", 
+  "handle_lever", "handle_circular", "lift_button_normal", "lift_button_openarea", "lift_button_layer", "lift_button_emergency", "direction_sign_left", "direction_sign_right", 
+  "direction_sign_straight", "direction_sign_exit", "sign_disabled_toilet", "sign_disabled_parking", "sign_disabled_elevator", "sign_disabled_callbell", "sign_disabled_icon", 
+  "braille_sign", "chair_multi", "chair_one", "chair_circular", "chair_back", "chair_handle", "number_ticker_machine", "beverage_vending_machine", "beverage_desk", "trash_can", 
+  "mailbox"]
   ```
 - 이 때, 이미지 폴더의 경로만 입력하며 라벨링 폴더는 지정한 이미지 폴더와 같은 수준에서 labels 폴더를 자동탐색하며 Label 데이터는 Yolov5에 적용하기 위해 전처리 과정을 거쳐야 함
   - Json 라벨링 파일을 Yolov5 포맷의 txt 파일로 전처리하는 코드는 preprocessing_data 폴더에 존재
