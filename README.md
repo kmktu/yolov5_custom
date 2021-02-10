@@ -1,3 +1,125 @@
+#### 137.교통약자 주행 영상 학습 모델
+
+## Cuda 설치
+
+- 사용하는 그래픽카드의 그래픽드라이버 최신 버전으로 업데이트
+- https://en.wikipedia.org/wiki/CUDA 참조하여 GPU의 Compute Capability에 따라 권장되는 Version의 Cuda 설치 (Cuda 설치 주소 : https://developer.nvidia.com/cuda-downloads)
+
+## 소스코드 다운로드
+
+- Git
+  - 우분투의 경우 아래 명령어를 통해 Yolov5 다운로드
+  ```bash
+  $ git clone https://github.com/ultralytics/yolov5
+  ```
+  - Yolov5 구동을 위한 필요 라이브러리를 아래의 명령어를 통해 설치 (Git을 통해 다운받은 Yolov5 폴더 내에 requirements.txt 존재)
+  ```bash
+  $ pip install –r requirements.txt
+  ```
+
+- Docker
+  - 우분투의 경우 링크(https://docs.docker.com/engine/install/ubuntu/)를 참고하여 도커 설치
+  - GPU 사용을 위하여 링크(https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker)를 참고하여 Nvidia-Docker 설치
+  - 도커 허브로부터 아래의 명령어를 통해 이미지 다운로드
+  ```bash
+  $ sudo docker pull zlstl1/yolov5_custom:1.0
+  ```
+  - 만일 도커 이미지 파일(tar)을 로드 할 경우 아래 명령어 사용
+  ```bash
+  $ sudo docker load -i yolov5_custom_docker_image.tar
+  ```
+  - 도커 이미지 실행 (**호스트 PC에 데이터셋을 저장하고 도커 컨테이너 볼륨 연동**)
+  ```bash
+  $ sudo docker run --ipc=host --gpus all -it --name yolov5 -v “{데이터셋 경로}”:/usr/src/yolov5_data/ zlstl1/yolov5_custom:1.0
+  ```
+
+## 학습 또는 테스트에 필요한 데이터셋 및 모델 Weight 파일 준비
+
+- 다운 받은 Yolov5 폴더 내에 dataset.yaml 파일의 내용을 준비된 데이터셋 파일 위치로 작성
+  - 학습용 데이터의 이미지가 위치한 폴더들(Train, Validation, Test set)의 경로를 입력하고, 총 클래스의 수와 클래스명 리스트 작성
+  - ```python
+  train: ../yolov5_data/images/train/
+  val: ../yolov5_data/images/val/
+  test: ../yolov5_data/images/test/
+
+  nc: 83
+
+  names: ["flatness_A", "flatness_B", "flatness_C", "flatness_D", "flatness_E", "walkway_paved", "walkway_block", "paved_state_broken", "paved_state_normal", "block_state_broken", "block_state_normal", "block_kind_bad", "block_kind_good", "outcurb_rectangle", "outcurb_slide", "outcurb_rectangle_broken", "restspace", "sidegap_in", "sidegap_out", "sewer_cross", "sewer_line", "brailleblock_dot", "brailleblock_line", "brailleblock_dot_broken", "brailleblock_line_broken", "continuity_tree", "continuity_manhole", "ramp_yes", "ramp_no", "bicycleroad_broken", "bicycleroad_normal", "planecrosswalk_broken", "planecrosswalk_normal", "steepramp", "bump_slow", "weed", "floor_normal", "flowerbed", "parkspace", "tierbump", "stone", "enterrail", "stair_normal", "stair_broken", "wall", "window_sliding", "window_casement", "pillar", "lift", "door_normal", "lift_door", "resting_place_roof", "reception_desk", "protect_wall_protective", "protect_wall_guardrail", "protect_wall_kickplate", "handle_vertical", "handle_lever", "handle_circular", "lift_button_normal", "lift_button_openarea", "lift_button_layer", "lift_button_emergency", "direction_sign_left", "direction_sign_right", "direction_sign_straight", "direction_sign_exit", "sign_disabled_toilet", "sign_disabled_parking", "sign_disabled_elevator", "sign_disabled_callbell", "sign_disabled_icon", "braille_sign", "chair_multi", "chair_one", "chair_circular", "chair_back", "chair_handle", "number_ticker_machine", "beverage_vending_machine", "beverage_desk", "trash_can", "mailbox"]
+  ```
+- 이 때, 이미지 폴더의 경로만 입력하며 라벨링 폴더는 지정한 이미지 폴더와 같은 수준에서 labels 폴더를 자동탐색하며 Label 데이터는 Yolov5에 적용하기 위해 전처리 과정을 거쳐야 함
+  - Json 라벨링 파일을 Yolov5 포맷의 txt 파일로 전처리하는 코드는 preprocessing_data 폴더에 존재
+  - **폴더 구성 예시**
+  ```
+  Yolov5(d) ┌ images(d) ┌ test(d)
+            │           ├ train(d)
+            │           └ val(d)
+            └ labels(d) ┌ test.py(d)
+                        ├ pretrain_weights.pt(d)
+                        └ dataset.yaml(d)
+  ```
+- Yolov5 폴더에 Pretrain된 모델 Weight 파일 준비 (https://drive.google.com/file/d/1x9GY9VzzxrQQz_t1nu-YWjJGcfJrHxAO/view?usp=sharing)
+- 하이퍼파라미터 설정
+  - Yolov5에서 제공하는 hyp.scratch.yaml을 사용해도 되며, 아래 테스트에 사용된 하이퍼파라미터를 사용할 수 있음
+  - 아래 하이퍼파라미터는 Yolov5에서 제공하는 evolve 기능을 활용하여 300회 테스트를 거쳐 작성된 하이퍼파라미터임
+  ```bash
+  lr0: 0.009934738973528694
+  lrf: 0.21644279974757322
+  momentum: 0.9046840664373422
+  weight_decay: 0.0005
+  warmup_epochs: 2.8106678828929703
+  warmup_momentum: 0.8083371255070754
+  warmup_bias_lr: 0.09964175754168185
+  box: 0.05197184912237901
+  cls: 0.4713686246148482
+  cls_pw: 0.9996313350307685
+  obj: 1.0356181747417663
+  obj_pw: 1.0442242765666825
+  iou_t: 0.2
+  anchor_t: 3.6934069617987126
+  fl_gamma: 0.0
+  hsv_h: 0.015
+  hsv_s: 0.7340341395870112
+  hsv_v: 0.3501362351182459
+  degrees: 0.0
+  translate: 0.10443998162459062
+  scale: 0.4855717407337331
+  shear: 0.0
+  perspective: 0.0
+  flipud: 0.0
+  fliplr: 0.5113753013965541
+  mosaic: 1.0
+  mixup: 0.0
+  ```
+- 최종 폴더체계 – 중요 파일 위치 (d:디렉토리 f:파일)
+  ```
+  Yolov5(d) ┌ train.py(f)
+            ├ test.py(f)
+            ├ pretrain_weights.pt(f)
+            ├ dataset.yaml(f)
+            └ data(d) - hyp_evolved.yaml(f)
+  ```
+
+## 실제 학습 또는 테스트 진행
+- 테스트 코드 예시 (dataset.yaml 및 pretrain_weights.pt는 4번 항목에서 준비된 데이터셋 설정 파일과 weight 파일명에 따라 다름)
+```bash
+$ python3 test.py --data dataset.yaml --weights pretrain_weights.pt --task test
+```
+- 학습 코드 예시 
+```bash
+$ python3 train.py --data dataset.yaml --weights pretrain_weights.pt --hyp hyp.evolved.yaml --epochs 300 --batch 32
+```
+
+
+
+
+-----
+-----
+-----
+-----
+-----
+
+#### Yolov5 공식 홈페이지 readme
+
 <a href="https://apps.apple.com/app/id1452689527" target="_blank">
 <img src="https://user-images.githubusercontent.com/26833433/98699617-a1595a00-2377-11eb-8145-fc674eb9b1a7.jpg" width="1000"></a>
 &nbsp
